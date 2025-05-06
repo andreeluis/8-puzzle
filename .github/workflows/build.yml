@@ -19,10 +19,11 @@ jobs:
 
       - name: Build executable
         run: |
-          pyinstaller --onedir main.py
+          pyinstaller --onefile main.py
 
-      - name: List dist folder
-        run: dir dist
+      - name: Check contents of dist
+        run: |
+          Get-ChildItem -Recurse dist
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
