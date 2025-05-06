@@ -32,10 +32,10 @@ class PuzzleGUI:
 		self.algorithm_label = tk.Label(self.algorithm_frame, text="Solve with:")
 		self.algorithm_label.pack(side=tk.LEFT, padx=5)
 		self.algorithm_var = tk.StringVar(value="BFS")
-		self.algorithm_menu = tk.OptionMenu(self.algorithm_frame, self.algorithm_var, "BFS", "DFS", "A*")
+		self.algorithm_menu = tk.OptionMenu(self.algorithm_frame, self.algorithm_var, "BFS", "Greedy", "A*")
 		self.algorithm_menu.pack(side=tk.LEFT, padx=5)
 		def update_heuristic_menu(*args):
-			if self.algorithm_var.get() == "A*":
+			if self.algorithm_var.get() == "A*" or self.algorithm_var.get() == "Greedy":
 				self.heuristic_label.pack(side=tk.LEFT, padx=5)
 				self.heuristic_menu.pack(side=tk.LEFT, padx=5)
 			else:
@@ -67,6 +67,9 @@ class PuzzleGUI:
 		self.info_frame = tk.Frame(self.root)
 		self.info_frame.grid(row=3, column=0, columnspan=3, pady=10)
 
+		self.visited_nodes_label = tk.Label(self.info_frame, text="Visited Nodes: 0")
+		self.visited_nodes_label.pack(side=tk.LEFT, padx=5)
+
 		self.moves_label = tk.Label(self.info_frame, text="Moves: 0")
 		self.moves_label.pack(side=tk.LEFT, padx=5)
 
@@ -81,18 +84,24 @@ class PuzzleGUI:
 
 	def reset_config(self):
 		self.puzzle.reset()
+
+		self.visited_nodes_label.config(text=f"Visited Nodes: 0")
+		self.time_label.config(text=f"Time to Solution: 0.0s")
+		self.moves_label.config(text=f"Moves: 0")
+
 		self.update_ui()
 
 
 	def solve_config(self):
 		start_time = time.time()
-		path = self.puzzle.solve(self.algorithm_var.get(), self.heuristic_var.get())
+		path, explored_nodes = self.puzzle.solve(self.algorithm_var.get(), self.heuristic_var.get())
 
 		if path is None:
 			print("No solution found!")
 			return
 
 		end_time = time.time()
+		self.visited_nodes_label.config(text=f"Visited Nodes: {explored_nodes}")
 		self.time_label.config(text=f"Time to Solution: {end_time - start_time:.2f}s")
 		self.moves_label.config(text=f"Moves: {len(path)}")
 

@@ -33,12 +33,12 @@ class Puzzle:
 
 	def solve(self, algorithm, heuristic=None):
 		""" Solve the puzzle using the specified algorithm """
-		from solve import solve_with_bfs, solve_with_dfs, solve_with_a_star
+		from solve import solve_with_bfs, solve_with_greedy, solve_with_a_star
 
 		if algorithm == "BFS":
 			return solve_with_bfs(self)
-		elif algorithm == "DFS":
-			return solve_with_dfs(self)
+		elif algorithm == "Greedy":
+			return solve_with_greedy(self, heuristic)
 		elif algorithm == "A*":
 			return solve_with_a_star(self, heuristic)
 		else:
